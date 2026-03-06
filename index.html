@@ -1,570 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Umbra Digital — Modern web design studio helping small businesses elevate their online presence." />
-  <title>Umbra Digital — Modern Web Studio</title>
-
-  <!-- ─── Google Fonts ─── -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
-  <!-- ─── Tailwind CDN ─── -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Umbra Digital</title>
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color:#0A0A0F; color:white; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Plus Jakarta Sans', sans-serif; }
+    
+    /* Moon Rotation */
+    @keyframes umbRotate { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
+    .moon-container { animation: umbRotate 30s linear infinite; transform-style: preserve-3d; }
 
-  <!-- ─── Tailwind Config ─── -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'umbra-bg':      '#0A0A0F',
-            'umbra-surface': '#12121A',
-            'umbra-card':    '#1A1A28',
-            'umbra-border':  '#ffffff0f',
-            'glow-cyan':     '#6EE7FF',
-            'glow-violet':   '#A78BFA',
-          },
-          fontFamily: {
-            heading: ['"Plus Jakarta Sans"', 'sans-serif'],
-            body:    ['Inter', 'sans-serif'],
-          },
-        },
-      },
-    };
-  </script>
+    /* Fade-in sections */
+    .fade-in { opacity:0; transform: translateY(20px); transition: opacity 1s ease, transform 1s ease; }
+    .fade-in.visible { opacity:1; transform: translateY(0); }
 
-  <!-- ─── Custom Styles ─── -->
-  <link rel="stylesheet" href="style.css" />
+    /* Button hover glow */
+    .btn-glow:hover { box-shadow: 0 0 20px #6EE7FF; transform: translateY(-2px); }
+  </style>
 </head>
+<body class="overflow-x-hidden">
 
-<body class="bg-umbra-bg text-white font-body overflow-x-hidden">
-
-  <!-- ░░░ GRAIN OVERLAY ░░░ -->
-  <div class="grain-overlay" aria-hidden="true"></div>
-
-  <!-- ░░░ AMBIENT GLOW BLOBS ░░░ -->
-  <div class="ambient-blob blob-1" aria-hidden="true"></div>
-  <div class="ambient-blob blob-2" aria-hidden="true"></div>
-
-  <!-- ╔══════════════════════════════════════╗
-       ║            HEADER / NAV              ║
-       ╚══════════════════════════════════════╝ -->
-  <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
-    <nav class="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
-
-      <!-- Logo -->
-      <a href="#home" class="logo-mark flex items-center gap-3 group">
-        <!-- Crescent SVG -->
-        <svg class="crescent-icon w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22 16C22 22.627 17.523 28 12 28C9.374 28 7 26.806 5.252 24.889C6.454 25.26 7.707 25.46 9 25.46C15.627 25.46 21 20.087 21 13.46C21 10.806 20.16 8.34 18.72 6.34C20.696 8.29 22 11.978 22 16Z" stroke="url(#grad1)" stroke-width="1.5" fill="url(#grad1)" fill-opacity="0.15"/>
-          <defs>
-            <linearGradient id="grad1" x1="5" y1="6" x2="22" y2="28" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#6EE7FF"/>
-              <stop offset="100%" stop-color="#A78BFA"/>
-            </linearGradient>
-          </defs>
-        </svg>
-        <span class="font-heading font-700 tracking-[0.2em] text-[15px] uppercase text-white group-hover:text-glow-cyan transition-colors duration-300">UMBRA</span>
-      </a>
-
-      <!-- Desktop Nav -->
-      <ul class="hidden md:flex items-center gap-8">
-        <li><a href="#home"     class="nav-link">Home</a></li>
-        <li><a href="#services" class="nav-link">Services</a></li>
-        <li><a href="#work"     class="nav-link">Work</a></li>
-        <li><a href="#about"    class="nav-link">About</a></li>
-        <li><a href="#contact"  class="nav-link">Contact</a></li>
-      </ul>
-
-      <!-- CTA -->
-      <a href="#contact" class="hidden md:inline-flex btn-primary">
-        Start a Project
-      </a>
-
-      <!-- Mobile menu toggle -->
-      <button id="menu-toggle" class="md:hidden flex flex-col gap-[5px] p-2" aria-label="Toggle menu">
-        <span class="menu-line w-6 h-[1.5px] bg-white/70 block transition-all duration-300"></span>
-        <span class="menu-line w-4 h-[1.5px] bg-glow-cyan block transition-all duration-300"></span>
-        <span class="menu-line w-6 h-[1.5px] bg-white/70 block transition-all duration-300"></span>
-      </button>
-    </nav>
-
-    <!-- Mobile Nav Drawer -->
-    <div id="mobile-menu" class="mobile-menu md:hidden hidden">
-      <ul class="px-6 pb-8 space-y-6">
-        <li><a href="#home"     class="mobile-nav-link">Home</a></li>
-        <li><a href="#services" class="mobile-nav-link">Services</a></li>
-        <li><a href="#work"     class="mobile-nav-link">Work</a></li>
-        <li><a href="#about"    class="mobile-nav-link">About</a></li>
-        <li><a href="#contact"  class="mobile-nav-link">Contact</a></li>
-        <li><a href="#contact"  class="btn-primary inline-block mt-2">Start a Project</a></li>
-      </ul>
-    </div>
-  </header>
-
-
-  <!-- ╔══════════════════════════════════════╗
-       ║              HERO                    ║
-       ╚══════════════════════════════════════╝ -->
-  <section id="home" class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
-
-    <!-- Horizontal rule decoration -->
-    <div class="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" aria-hidden="true"></div>
-
-    <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full grid lg:grid-cols-2 gap-16 items-center">
-
-      <!-- ── Left: Copy ── -->
-      <div class="reveal-left">
-        <div class="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full glass-pill">
-          <span class="w-1.5 h-1.5 rounded-full bg-glow-cyan animate-pulse"></span>
-          <span class="text-xs font-body font-500 tracking-widest uppercase text-white/60">Web Studio</span>
-        </div>
-
-        <h1 class="font-heading font-800 text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-tight mb-6">
-          Modern Websites<br/>
-          <span class="gradient-text">That Elevate</span><br/>
-          Your Business
-        </h1>
-
-        <p class="font-body font-300 text-lg text-white/50 leading-relaxed max-w-md mb-10">
-          We design modern, high-performance websites that help small businesses stand out and attract more customers online.
+  <!-- HERO SECTION -->
+  <section class="bg-[#0A0A0F] text-white py-32 px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+      <!-- TEXT -->
+      <div class="md:w-1/2 space-y-6 fade-in">
+        <h1 class="text-5xl font-bold leading-tight">Modern Websites That Elevate Your Business</h1>
+        <p class="text-lg text-gray-300 max-w-xl">
+          We design high-performance websites that help small businesses stand out and attract more customers online.
         </p>
-
-        <div class="flex flex-wrap gap-4">
-          <a href="#contact" class="btn-primary">Start a Project</a>
-          <a href="#work"    class="btn-secondary">View Our Work</a>
-        </div>
-
-        <!-- Social proof -->
-        <div class="mt-12 flex items-center gap-6 pt-8 border-t border-white/5">
-          <div class="text-center">
-            <p class="font-heading font-700 text-2xl gradient-text">50+</p>
-            <p class="text-xs text-white/40 mt-0.5 tracking-wider uppercase">Projects</p>
-          </div>
-          <div class="w-px h-8 bg-white/10"></div>
-          <div class="text-center">
-            <p class="font-heading font-700 text-2xl gradient-text">100%</p>
-            <p class="text-xs text-white/40 mt-0.5 tracking-wider uppercase">Satisfaction</p>
-          </div>
-          <div class="w-px h-8 bg-white/10"></div>
-          <div class="text-center">
-            <p class="font-heading font-700 text-2xl gradient-text">3×</p>
-            <p class="text-xs text-white/40 mt-0.5 tracking-wider uppercase">Avg Growth</p>
-          </div>
+        <div class="flex items-center gap-4">
+          <a href="#contact" class="px-7 py-3 bg-[#6EE7FF] text-black font-semibold rounded-lg btn-glow transition">Start a Project</a>
+          <a href="#work" class="text-[#A78BFA] font-medium hover:underline">View Our Work</a>
         </div>
       </div>
-
-      <!-- ── Right: Moon Visual ── -->
-      <div class="reveal-right flex items-center justify-center relative">
-        <div class="moon-scene">
-          <!-- Orbit rings -->
-          <div class="orbit-ring ring-1" aria-hidden="true"></div>
-          <div class="orbit-ring ring-2" aria-hidden="true"></div>
-          <div class="orbit-ring ring-3" aria-hidden="true"></div>
-
-          <!-- Moon sphere -->
-          <div class="moon-sphere">
-            <div class="moon-surface"></div>
-            <div class="moon-crescent-shadow"></div>
-            <div class="moon-glow-inner"></div>
-          </div>
-
-          <!-- Floating particles -->
-          <div class="moon-particle p1" aria-hidden="true"></div>
-          <div class="moon-particle p2" aria-hidden="true"></div>
-          <div class="moon-particle p3" aria-hidden="true"></div>
-          <div class="moon-particle p4" aria-hidden="true"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-      <span class="text-[10px] tracking-[0.3em] uppercase text-white/60">Scroll</span>
-      <div class="scroll-indicator"></div>
-    </div>
-  </section>
-
-
-  <!-- ╔══════════════════════════════════════╗
-       ║            SERVICES                  ║
-       ╚══════════════════════════════════════╝ -->
-  <section id="services" class="py-32 relative">
-    <div class="max-w-7xl mx-auto px-6 lg:px-10">
-
-      <!-- Section header -->
-      <div class="section-header reveal-up mb-20">
-        <p class="section-eyebrow">What We Do</p>
-        <h2 class="section-title">Our Services</h2>
-        <p class="section-subtitle">Everything your business needs to thrive online.</p>
-      </div>
-
-      <!-- Cards grid -->
-      <div class="grid md:grid-cols-3 gap-6">
-
-        <!-- Card 1: Design -->
-        <div class="glass-card reveal-up" style="--delay: 0ms">
-          <div class="service-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="none" class="w-6 h-6">
-              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="url(#s1)" stroke-width="1.5" stroke-linejoin="round"/>
-              <defs><linearGradient id="s1" x1="2" y1="2" x2="22" y2="21"><stop stop-color="#6EE7FF"/><stop offset="1" stop-color="#A78BFA"/></linearGradient></defs>
-            </svg>
-          </div>
-          <h3 class="font-heading font-700 text-xl mb-3 mt-5">Website Design</h3>
-          <p class="text-white/50 font-body font-300 text-[15px] leading-relaxed">Beautiful modern websites tailored to your brand identity and target audience.</p>
-          <div class="service-card-line"></div>
-        </div>
-
-        <!-- Card 2: Development -->
-        <div class="glass-card reveal-up" style="--delay: 100ms">
-          <div class="service-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="none" class="w-6 h-6">
-              <polyline points="16 18 22 12 16 6" stroke="url(#s2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <polyline points="8 6 2 12 8 18"   stroke="url(#s2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <defs><linearGradient id="s2" x1="2" y1="6" x2="22" y2="18"><stop stop-color="#6EE7FF"/><stop offset="1" stop-color="#A78BFA"/></linearGradient></defs>
-            </svg>
-          </div>
-          <h3 class="font-heading font-700 text-xl mb-3 mt-5">Website Development</h3>
-          <p class="text-white/50 font-body font-300 text-[15px] leading-relaxed">Fast, responsive, and optimized for every device. Built with clean, modern code.</p>
-          <div class="service-card-line"></div>
-        </div>
-
-        <!-- Card 3: Support -->
-        <div class="glass-card reveal-up" style="--delay: 200ms">
-          <div class="service-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="none" class="w-6 h-6">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="url(#s3)" stroke-width="1.5" stroke-linecap="round"/>
-              <polyline points="22 4 12 14.01 9 11.01" stroke="url(#s3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <defs><linearGradient id="s3" x1="2" y1="2" x2="22" y2="22"><stop stop-color="#6EE7FF"/><stop offset="1" stop-color="#A78BFA"/></linearGradient></defs>
-            </svg>
-          </div>
-          <h3 class="font-heading font-700 text-xl mb-3 mt-5">Launch &amp; Support</h3>
-          <p class="text-white/50 font-body font-300 text-[15px] leading-relaxed">We help your website go live and perform smoothly with ongoing support and care.</p>
-          <div class="service-card-line"></div>
-        </div>
-
+      <!-- MOON -->
+      <div class="md:w-1/2 relative moon-container w-full h-[500px] fade-in">
+        <spline-viewer url="https://prod.spline.design/o3Lq-KsL8wG37qqD/scene.splinecode" style="width:100%; height:100%;"></spline-viewer>
       </div>
     </div>
   </section>
 
-
-  <!-- ╔══════════════════════════════════════╗
-       ║             PROCESS                  ║
-       ╚══════════════════════════════════════╝ -->
-  <section id="process" class="py-32 relative overflow-hidden">
-
-    <!-- Section background accent -->
-    <div class="absolute inset-0 bg-umbra-surface/50" aria-hidden="true"></div>
-    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" aria-hidden="true"></div>
-    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" aria-hidden="true"></div>
-
-    <div class="relative max-w-7xl mx-auto px-6 lg:px-10">
-
-      <div class="section-header reveal-up mb-20">
-        <p class="section-eyebrow">How It Works</p>
-        <h2 class="section-title">Our Process</h2>
-        <p class="section-subtitle">Three focused steps from idea to a live, thriving website.</p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-8 relative">
-
-        <!-- Connector line (desktop only) -->
-        <div class="hidden md:block absolute top-[52px] left-[calc(16.66%+16px)] right-[calc(16.66%+16px)] h-px bg-gradient-to-r from-glow-cyan/30 via-glow-violet/30 to-glow-cyan/30" aria-hidden="true"></div>
-
-        <!-- Step 1 -->
-        <div class="process-step reveal-up" style="--delay: 0ms">
-          <div class="process-number">01</div>
-          <h3 class="font-heading font-700 text-xl mb-3">Discover</h3>
-          <p class="text-white/50 font-body font-300 text-[15px] leading-relaxed">We learn about your business, goals, audience, and vision to build the perfect foundation.</p>
+  <!-- SERVICES SECTION -->
+  <section class="py-32 px-8 fade-in">
+    <div class="max-w-7xl mx-auto text-center space-y-12">
+      <h2 class="text-4xl font-bold">Our Services</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 hover:translate-y-1 hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold">Website Design</h3>
+          <p class="text-gray-300 mt-2">Beautiful modern websites tailored to your brand.</p>
         </div>
-
-        <!-- Step 2 -->
-        <div class="process-step reveal-up" style="--delay: 120ms">
-          <div class="process-number">02</div>
-          <h3 class="font-heading font-700 text-xl mb-3">Design</h3>
-          <p class="text-white/50 font-body font-300 text-[15px] leading-relaxed">We craft a modern, bespoke website tailored precisely to your brand and target market.</p>
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 hover:translate-y-1 hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold">Website Development</h3>
+          <p class="text-gray-300 mt-2">Fast, responsive, and optimized for every device.</p>
         </div>
-
-        <!-- Step 3 -->
-        <div class="process-step reveal-up" style="--delay: 240ms">
-          <div class="process-number">03</div>
-          <h3 class="font-heading font-700 text-xl mb-3">Launch</h3>
-          <p class="text-white/50 font-body font-300 text-[15px] leading-relaxed">Your website goes live, fully tested and ready to attract customers from day one.</p>
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 hover:translate-y-1 hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold">Launch & Support</h3>
+          <p class="text-gray-300 mt-2">We help your website go live and perform smoothly.</p>
         </div>
-
       </div>
     </div>
   </section>
 
-
-  <!-- ╔══════════════════════════════════════╗
-       ║           FEATURED WORK              ║
-       ╚══════════════════════════════════════╝ -->
-  <section id="work" class="py-32">
-    <div class="max-w-7xl mx-auto px-6 lg:px-10">
-
-      <div class="section-header reveal-up mb-20">
-        <p class="section-eyebrow">Portfolio</p>
-        <h2 class="section-title">Featured Work</h2>
-        <p class="section-subtitle">A glimpse at what we've built for our clients.</p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-
-        <!-- Project 1 -->
-        <div class="work-card reveal-up" style="--delay: 0ms">
-          <div class="work-img-wrap">
-            <div class="work-img-placeholder" style="--c1: #6EE7FF; --c2: #A78BFA;">
-              <div class="work-img-grid" aria-hidden="true">
-                <!-- Decorative grid lines baked as SVG -->
-                <svg width="100%" height="100%" viewBox="0 0 320 200" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="wg1" x1="0" y1="0" x2="320" y2="200" gradientUnits="userSpaceOnUse">
-                      <stop stop-color="#6EE7FF" stop-opacity=".15"/>
-                      <stop offset="1" stop-color="#A78BFA" stop-opacity=".15"/>
-                    </linearGradient>
-                  </defs>
-                  <rect width="320" height="200" fill="url(#wg1)"/>
-                  <!-- Mock browser bar -->
-                  <rect x="20" y="18" width="280" height="164" rx="6" fill="none" stroke="#6EE7FF" stroke-opacity=".2" stroke-width="1"/>
-                  <rect x="20" y="18" width="280" height="28" rx="6" fill="#6EE7FF" fill-opacity=".06"/>
-                  <circle cx="38" cy="32" r="4" fill="#6EE7FF" fill-opacity=".4"/>
-                  <circle cx="53" cy="32" r="4" fill="#A78BFA" fill-opacity=".4"/>
-                  <circle cx="68" cy="32" r="4" fill="#ffffff" fill-opacity=".15"/>
-                  <!-- Content lines -->
-                  <rect x="36" y="62" width="120" height="8" rx="4" fill="#6EE7FF" fill-opacity=".35"/>
-                  <rect x="36" y="78" width="80"  height="5" rx="2.5" fill="#fff" fill-opacity=".1"/>
-                  <rect x="36" y="90" width="100" height="5" rx="2.5" fill="#fff" fill-opacity=".1"/>
-                  <rect x="36" y="116" width="60"  height="24" rx="4" fill="#6EE7FF" fill-opacity=".25"/>
-                  <!-- Hero image mock -->
-                  <rect x="170" y="52" width="110" height="110" rx="8" fill="#A78BFA" fill-opacity=".12" stroke="#A78BFA" stroke-opacity=".2" stroke-width="1"/>
-                  <circle cx="225" cy="107" r="22" fill="#A78BFA" fill-opacity=".2"/>
-                </svg>
-              </div>
-            </div>
-            <div class="work-overlay">
-              <span class="work-view-label">View Project</span>
-            </div>
-          </div>
-          <div class="pt-5 px-1">
-            <p class="text-xs tracking-widest uppercase text-glow-cyan/60 mb-2 font-body">Food &amp; Dining</p>
-            <h3 class="font-heading font-700 text-lg mb-1">Restaurant Website</h3>
-            <p class="text-white/40 text-sm font-body font-300">Modern menu, reservations, and brand storytelling for a local fine-dining restaurant.</p>
-          </div>
+  <!-- PROCESS SECTION -->
+  <section class="py-32 px-8 bg-[#12121A] fade-in">
+    <div class="max-w-7xl mx-auto text-center space-y-12">
+      <h2 class="text-4xl font-bold">Our Process</h2>
+      <div class="grid md:grid-cols-3 gap-8 text-left">
+        <div class="p-6 border border-white/10 rounded-xl">
+          <h3 class="text-xl font-semibold mb-2">1. Discover</h3>
+          <p class="text-gray-300">We learn about your business and goals.</p>
         </div>
-
-        <!-- Project 2 -->
-        <div class="work-card reveal-up" style="--delay: 100ms">
-          <div class="work-img-wrap">
-            <div class="work-img-placeholder">
-              <svg width="100%" height="100%" viewBox="0 0 320 200" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="wg2" x1="0" y1="0" x2="320" y2="200" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#A78BFA" stop-opacity=".15"/>
-                    <stop offset="1" stop-color="#6EE7FF" stop-opacity=".15"/>
-                  </linearGradient>
-                </defs>
-                <rect width="320" height="200" fill="url(#wg2)"/>
-                <rect x="20" y="18" width="280" height="164" rx="6" fill="none" stroke="#A78BFA" stroke-opacity=".2" stroke-width="1"/>
-                <rect x="20" y="18" width="280" height="28" rx="6" fill="#A78BFA" fill-opacity=".06"/>
-                <circle cx="38" cy="32" r="4" fill="#A78BFA" fill-opacity=".4"/>
-                <circle cx="53" cy="32" r="4" fill="#6EE7FF" fill-opacity=".4"/>
-                <circle cx="68" cy="32" r="4" fill="#fff" fill-opacity=".15"/>
-                <!-- Cross/medical icon mock -->
-                <rect x="140" y="60" width="40" height="8" rx="4" fill="#A78BFA" fill-opacity=".4"/>
-                <rect x="156" y="44" width="8" height="40" rx="4" fill="#A78BFA" fill-opacity=".4"/>
-                <!-- Content blocks -->
-                <rect x="36" y="62" width="90" height="7" rx="3.5" fill="#fff" fill-opacity=".12"/>
-                <rect x="36" y="78" width="70" height="5" rx="2.5" fill="#fff" fill-opacity=".08"/>
-                <rect x="36" y="91" width="80" height="5" rx="2.5" fill="#fff" fill-opacity=".08"/>
-                <rect x="36" y="110" width="55" height="22" rx="4" fill="#A78BFA" fill-opacity=".25"/>
-                <rect x="36" y="140" width="240" height="1" rx=".5" fill="#fff" fill-opacity=".05"/>
-                <rect x="36" y="152" width="60" height="5" rx="2.5" fill="#fff" fill-opacity=".06"/>
-                <rect x="108" y="152" width="60" height="5" rx="2.5" fill="#fff" fill-opacity=".06"/>
-              </svg>
-            </div>
-            <div class="work-overlay">
-              <span class="work-view-label">View Project</span>
-            </div>
-          </div>
-          <div class="pt-5 px-1">
-            <p class="text-xs tracking-widest uppercase text-glow-violet/60 mb-2 font-body">Healthcare</p>
-            <h3 class="font-heading font-700 text-lg mb-1">Dental Clinic Website</h3>
-            <p class="text-white/40 text-sm font-body font-300">Clean, trust-building site with service listings, booking system, and patient portal.</p>
-          </div>
+        <div class="p-6 border border-white/10 rounded-xl">
+          <h3 class="text-xl font-semibold mb-2">2. Design</h3>
+          <p class="text-gray-300">We craft a modern website tailored to your brand.</p>
         </div>
-
-        <!-- Project 3 -->
-        <div class="work-card reveal-up" style="--delay: 200ms">
-          <div class="work-img-wrap">
-            <div class="work-img-placeholder">
-              <svg width="100%" height="100%" viewBox="0 0 320 200" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="wg3" x1="0" y1="0" x2="320" y2="200" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#6EE7FF" stop-opacity=".1"/>
-                    <stop offset=".5" stop-color="#A78BFA" stop-opacity=".1"/>
-                    <stop offset="1" stop-color="#6EE7FF" stop-opacity=".1"/>
-                  </linearGradient>
-                </defs>
-                <rect width="320" height="200" fill="url(#wg3)"/>
-                <rect x="20" y="18" width="280" height="164" rx="6" fill="none" stroke="#6EE7FF" stroke-opacity=".15" stroke-width="1"/>
-                <rect x="20" y="18" width="280" height="28" rx="6" fill="#6EE7FF" fill-opacity=".04"/>
-                <circle cx="38" cy="32" r="4" fill="#6EE7FF" fill-opacity=".3"/>
-                <circle cx="53" cy="32" r="4" fill="#A78BFA" fill-opacity=".3"/>
-                <circle cx="68" cy="32" r="4" fill="#fff" fill-opacity=".12"/>
-                <!-- Dumbbell icon mock -->
-                <rect x="130" y="98" width="60" height="8" rx="4" fill="#6EE7FF" fill-opacity=".3"/>
-                <rect x="128" y="94" width="12" height="16" rx="3" fill="#6EE7FF" fill-opacity=".25"/>
-                <rect x="180" y="94" width="12" height="16" rx="3" fill="#6EE7FF" fill-opacity=".25"/>
-                <!-- Full-bleed hero style -->
-                <rect x="36" y="55" width="248" height="36" rx="4" fill="#6EE7FF" fill-opacity=".06"/>
-                <rect x="36" y="58" width="140" height="9" rx="4.5" fill="#6EE7FF" fill-opacity=".3"/>
-                <rect x="36" y="74" width="100" height="6" rx="3" fill="#fff" fill-opacity=".08"/>
-                <rect x="36" y="130" width="50" height="20" rx="4" fill="#6EE7FF" fill-opacity=".22"/>
-                <rect x="94" y="130" width="50" height="20" rx="4" fill="none" stroke="#6EE7FF" stroke-opacity=".22" stroke-width="1"/>
-              </svg>
-            </div>
-            <div class="work-overlay">
-              <span class="work-view-label">View Project</span>
-            </div>
-          </div>
-          <div class="pt-5 px-1">
-            <p class="text-xs tracking-widest uppercase text-glow-cyan/60 mb-2 font-body">Fitness</p>
-            <h3 class="font-heading font-700 text-lg mb-1">Fitness Gym Website</h3>
-            <p class="text-white/40 text-sm font-body font-300">High-energy design with class schedules, membership plans, and trainer profiles.</p>
-          </div>
+        <div class="p-6 border border-white/10 rounded-xl">
+          <h3 class="text-xl font-semibold mb-2">3. Launch</h3>
+          <p class="text-gray-300">Your website goes live ready to attract customers.</p>
         </div>
-
       </div>
     </div>
   </section>
 
-
-  <!-- ╔══════════════════════════════════════╗
-       ║              ABOUT                   ║
-       ╚══════════════════════════════════════╝ -->
-  <section id="about" class="py-32 relative overflow-hidden">
-
-    <div class="absolute inset-0 bg-umbra-surface/40" aria-hidden="true"></div>
-    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" aria-hidden="true"></div>
-    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" aria-hidden="true"></div>
-
-    <div class="relative max-w-7xl mx-auto px-6 lg:px-10">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
-
-        <!-- Left: text -->
-        <div class="reveal-left">
-          <p class="section-eyebrow">Who We Are</p>
-          <h2 class="font-heading font-800 text-4xl lg:text-5xl leading-[1.1] tracking-tight mb-6">
-            About <span class="gradient-text">Umbra</span>
-          </h2>
-          <p class="text-white/50 font-body font-300 text-lg leading-relaxed mb-6">
-            Umbra Digital is a modern web studio focused on helping small businesses establish a strong online presence through clean design and high-performance websites.
-          </p>
-          <p class="text-white/40 font-body font-300 text-base leading-relaxed mb-10">
-            We believe every business deserves a website that not only looks stunning but genuinely converts visitors into customers. Our team blends design strategy, modern technology, and a genuine passion for craft.
-          </p>
-          <a href="#contact" class="btn-primary">Work With Us</a>
+  <!-- FEATURED WORK -->
+  <section class="py-32 px-8 fade-in">
+    <div class="max-w-7xl mx-auto text-center space-y-12">
+      <h2 class="text-4xl font-bold">Featured Work</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
+          <h3 class="text-xl font-semibold">Restaurant Website</h3>
+          <p class="text-gray-300 mt-2">High-quality design for dining businesses.</p>
         </div>
-
-        <!-- Right: decorative grid -->
-        <div class="reveal-right">
-          <div class="about-grid">
-            <div class="about-stat-card">
-              <p class="font-heading font-800 text-4xl gradient-text">50+</p>
-              <p class="text-white/40 text-sm mt-1 tracking-wide">Websites Launched</p>
-            </div>
-            <div class="about-stat-card">
-              <p class="font-heading font-800 text-4xl gradient-text">3yrs</p>
-              <p class="text-white/40 text-sm mt-1 tracking-wide">In Business</p>
-            </div>
-            <div class="about-stat-card col-span-2">
-              <p class="font-heading font-800 text-4xl gradient-text">100%</p>
-              <p class="text-white/40 text-sm mt-1 tracking-wide">Client Satisfaction Rate</p>
-            </div>
-          </div>
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
+          <h3 class="text-xl font-semibold">Dental Clinic Website</h3>
+          <p class="text-gray-300 mt-2">Professional and approachable design.</p>
         </div>
-
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
+          <h3 class="text-xl font-semibold">Fitness Gym Website</h3>
+          <p class="text-gray-300 mt-2">Modern design that attracts clients.</p>
+        </div>
       </div>
     </div>
   </section>
 
-
-  <!-- ╔══════════════════════════════════════╗
-       ║              CTA                     ║
-       ╚══════════════════════════════════════╝ -->
-  <section id="contact" class="py-40 relative overflow-hidden text-center">
-
-    <!-- Big ambient glow -->
-    <div class="cta-glow" aria-hidden="true"></div>
-
-    <div class="relative max-w-3xl mx-auto px-6 reveal-up">
-      <p class="section-eyebrow mx-auto">Get In Touch</p>
-      <h2 class="font-heading font-800 text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-tight mt-4 mb-6">
-        Ready to elevate<br/>
-        <span class="gradient-text">your online presence?</span>
-      </h2>
-      <p class="text-white/45 font-body font-300 text-lg mb-12 max-w-xl mx-auto">
-        Let's build something incredible together. Reach out and let's talk about your project.
+  <!-- ABOUT SECTION -->
+  <section class="py-32 px-8 bg-[#12121A] fade-in">
+    <div class="max-w-4xl mx-auto text-center space-y-6">
+      <h2 class="text-4xl font-bold">About Umbra</h2>
+      <p class="text-gray-300 text-lg">
+        Umbra Digital is a modern web studio focused on helping small businesses establish a strong online presence through clean design and high-performance websites.
       </p>
-      <div class="flex flex-wrap gap-4 justify-center">
-        <a href="mailto:hello@umbradigital.com" class="btn-primary btn-large">Start Your Project</a>
-        <a href="mailto:hello@umbradigital.com" class="btn-secondary btn-large">hello@umbradigital.com</a>
-      </div>
     </div>
   </section>
 
+  <!-- FINAL CTA -->
+  <section class="py-32 px-8 text-center fade-in">
+    <h2 class="text-4xl font-bold mb-6">Ready to elevate your online presence?</h2>
+    <a href="#contact" class="px-10 py-4 bg-[#6EE7FF] text-black font-semibold rounded-lg btn-glow transition">Start Your Project</a>
+  </section>
 
-  <!-- ╔══════════════════════════════════════╗
-       ║              FOOTER                  ║
-       ╚══════════════════════════════════════╝ -->
-  <footer class="border-t border-white/5 py-12">
-    <div class="max-w-7xl mx-auto px-6 lg:px-10">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-
-        <!-- Logo -->
-        <a href="#home" class="logo-mark flex items-center gap-3 group">
-          <svg class="crescent-icon w-7 h-7" viewBox="0 0 32 32" fill="none">
-            <path d="M22 16C22 22.627 17.523 28 12 28C9.374 28 7 26.806 5.252 24.889C6.454 25.26 7.707 25.46 9 25.46C15.627 25.46 21 20.087 21 13.46C21 10.806 20.16 8.34 18.72 6.34C20.696 8.29 22 11.978 22 16Z" stroke="url(#fg1)" stroke-width="1.5" fill="url(#fg1)" fill-opacity="0.15"/>
-            <defs><linearGradient id="fg1" x1="5" y1="6" x2="22" y2="28" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#6EE7FF"/><stop offset="100%" stop-color="#A78BFA"/></linearGradient></defs>
-          </svg>
-          <span class="font-heading font-700 tracking-[0.2em] text-[14px] uppercase text-white/70 group-hover:text-glow-cyan transition-colors duration-300">UMBRA</span>
-        </a>
-
-        <!-- Nav links -->
-        <ul class="flex flex-wrap items-center gap-6 justify-center">
-          <li><a href="#home"     class="footer-link">Home</a></li>
-          <li><a href="#services" class="footer-link">Services</a></li>
-          <li><a href="#work"     class="footer-link">Work</a></li>
-          <li><a href="#about"    class="footer-link">About</a></li>
-          <li><a href="#contact"  class="footer-link">Contact</a></li>
-        </ul>
-
-        <!-- Email -->
-        <a href="mailto:hello@umbradigital.com" class="text-white/30 hover:text-glow-cyan text-sm font-body transition-colors duration-300">
-          hello@umbradigital.com
-        </a>
-
-      </div>
-
-      <!-- Bottom bar -->
-      <div class="mt-10 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p class="text-white/20 text-xs font-body tracking-wide">
-          &copy; 2025 Umbra Digital. All rights reserved.
-        </p>
-        <p class="text-white/15 text-xs font-body">
-          Crafted with precision &amp; care.
-        </p>
-      </div>
-
+  <!-- FOOTER -->
+  <footer class="py-12 px-8 bg-[#0A0A0F] text-gray-400 text-center fade-in">
+    <p class="mb-4 font-bold">🌙 UMBRA DIGITAL</p>
+    <div class="flex justify-center gap-6 mb-4">
+      <a href="#services" class="hover:text-white transition">Services</a>
+      <a href="#work" class="hover:text-white transition">Work</a>
+      <a href="#about" class="hover:text-white transition">About</a>
+      <a href="#contact" class="hover:text-white transition">Contact</a>
     </div>
+    <p>hello@umbradigital.com &copy; 2026</p>
   </footer>
 
-  <!-- ░░░ SCRIPTS ░░░ -->
-  <script src="script.js"></script>
+  <!-- JS for Fade-in on Scroll -->
+  <script>
+    const faders = document.querySelectorAll('.fade-in');
+    const options = { threshold: 0.3 };
+    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, options);
+    faders.forEach(fader => appearOnScroll.observe(fader));
+  </script>
+
 </body>
 </html>
