@@ -23,32 +23,38 @@
 <body class="overflow-x-hidden">
 
   <!-- HERO SECTION -->
-  <section class="bg-[#0A0A0F] text-white py-32 px-8 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
-      <!-- TEXT -->
+  <section class="relative bg-[#0A0A0F] text-white overflow-hidden">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-8 py-32 gap-12">
+      
+      <!-- LEFT TEXT -->
       <div class="md:w-1/2 space-y-6 fade-in">
-        <h1 class="text-5xl font-bold leading-tight">Web Design That Inspires Trust & Converts Visitors</h1>
-        <p class="text-lg text-gray-300 max-w-xl">
+        <h1 class="text-5xl md:text-6xl font-bold leading-tight">Web Design That Inspires Trust & Converts Visitors</h1>
+        <p class="text-lg md:text-xl text-gray-300 max-w-xl">
           We craft high-performance websites that help small businesses stand out and attract more customers online.
         </p>
-        <div class="flex items-center gap-4">
-          <a href="#contact" class="px-7 py-3 bg-[#6EE7FF] text-black font-semibold rounded-lg btn-glow transition">Start a Project</a>
-          <a href="#work" class="text-[#A78BFA] font-medium hover:underline">View Our Work</a>
+        <div class="flex items-center gap-4 mt-4">
+          <a href="#contact" class="px-8 py-4 bg-[#6EE7FF] text-black font-semibold rounded-lg btn-glow transition transform hover:scale-105">
+            Start a Project
+          </a>
+          <a href="#work" class="text-[#A78BFA] font-medium hover:underline">
+            View Our Work
+          </a>
         </div>
       </div>
 
-      <!-- SPINE MOON -->
-      <div class="md:w-1/2 w-full h-[500px] fade-in">
+      <!-- RIGHT MOON -->
+      <div class="md:w-1/2 w-full h-[600px] md:h-[700px] fade-in relative">
         <spline-viewer 
           url="https://prod.spline.design/o3Lq-KsL8wG37qqD/scene.splinecode" 
           style="width:100%; height:100%;" 
           camera-controls
           auto-rotate
         ></spline-viewer>
+
+        <!-- Glow behind moon -->
+        <div class="absolute inset-0 bg-gradient-radial from-[#6EE7FF]/40 via-transparent to-transparent pointer-events-none"></div>
       </div>
     </div>
-    <!-- Optional subtle radial glow behind moon -->
-    <div class="absolute inset-0 bg-gradient-radial from-[#6EE7FF]/20 via-transparent to-transparent pointer-events-none"></div>
   </section>
 
   <!-- SERVICES SECTION -->
@@ -151,15 +157,18 @@
     <p>hello@umbradigital.com &copy; 2026</p>
   </footer>
 
-  <!-- JS for Fade-in on Scroll -->
+  <!-- JS for fade-in on scroll -->
   <script>
     const faders = document.querySelectorAll('.fade-in');
-    const options = { threshold: 0.3 };
+    const appearOptions = { threshold: 0.3 };
     const appearOnScroll = new IntersectionObserver(function(entries, observer) {
       entries.forEach(entry => {
-        if(entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
       });
-    }, options);
+    }, appearOptions);
     faders.forEach(fader => appearOnScroll.observe(fader));
   </script>
 
