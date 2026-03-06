@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Umbra Digital — Web design and development for small businesses that want to be taken seriously online." />
+  <title>Umbra Digital</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
+
+  <style>
+    /* ─────────────────────────────────────────────
+       RESET & TOKENS
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+    :root {
+      --bg:          #040404;
+      --bg-raised:   #0a0a0a;
+      --line:        #1e1e1e;
+      --line-subtle: #141414;
+      --text:        #f0f0f0;
+      --text-mid:    #6b6b6b;
+      --text-low:    #333333;
+      --text-xlow:   #1f1f1f;
+      --white:       #ffffff;
+      --mono:        'DM Mono', monospace;
+      --sans:        'Bricolage Grotesque', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::selection { background: #fff; color: #000; }
+    ::-webkit-scrollbar { width: 1px; }
+    ::-webkit-scrollbar-thumb { background: #333; }
+
+    /* ─────────────────────────────────────────────
+       CURSOR
+    ───────────────────────────────────────────── */
+    #c-dot {
+      position: fixed;
+      width: 5px; height: 5px;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%);
+      transition: transform .08s linear;
+      will-change: transform;
+    }
+    #c-ring {
+      position: fixed;
+      width: 28px; height: 28px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%);
+      transition: width .25s ease, height .25s ease, border-color .25s ease;
+      will-change: transform;
+    }
+    body.cursor-hover #c-ring {
+      width: 44px; height: 44px;
+      border-color: rgba(255,255,255,0.6);
+    }
+
+    /* ─────────────────────────────────────────────
+       TYPOGRAPHY UTILITIES
+    ───────────────────────────────────────────── */
+    .label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+    }
+
+    .h-display {
+      font-family: var(--sans);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -.03em;
+      color: var(--white);
+    }
+
+    .body-text {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text-mid);
+    }
+
+    /* ─────────────────────────────────────────────
+       SCROLL REVEAL
+    ───────────────────────────────────────────── */
+    .sr {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s cubic-bezier(.25,1,.5,1),
+                  transform .7s cubic-bezier(.25,1,.5,1);
+    }
+    .sr.in { opacity: 1; transform: none; }
+    .sr-d1 { transition-delay: .08s; }
+    .sr-d2 { transition-delay: .16s; }
+    .sr-d3 { transition-delay: .24s; }
+    .sr-d4 { transition-delay: .36s; }
+
+    /* ─────────────────────────────────────────────
+       LAYOUT
+    ───────────────────────────────────────────── */
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    @media (max-width: 768px) { .wrap { padding: 0 24px; } }
+
+    hr.rule {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin: 0;
+    }
+
+    /* ─────────────────────────────────────────────
+       NAV
+    ───────────────────────────────────────────── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      transition: background .4s ease, border-color .4s ease;
+      border-bottom: 1px solid transparent;
+    }
+    #nav.scrolled {
+      background: rgba(4,4,4,.88);
+      backdrop-filter: blur(24px) saturate(1.5);
+      -webkit-backdrop-filter: blur(24px) saturate(1.5);
+      border-color: var(--line);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-mark {
+      width: 22px; height: 22px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50%;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-mark::after {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--white);
+      border-radius: 50%;
+    }
+    .nav-logo-text {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .06em;
+      color: var(--bg);
+      background: var(--white);
+      border: none;
+      border-radius: 100px;
+      padding: 9px 22px;
+      cursor: none;
+      transition: background .2s, transform .2s, opacity .2s;
+    }
+    .nav-cta:hover { background: #ddd; transform: translateY(-1px); }
+
+    #nav-mobile-btn {
+      display: none;
+      background: none; border: none;
+      cursor: none;
+      padding: 4px;
+      flex-direction: column; gap: 5px;
+    }
+    #nav-mobile-btn span {
+      display: block; width: 22px; height: 1px;
+      background: var(--text-mid);
+      transition: transform .25s, opacity .25s;
+    }
+
+    #nav-mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 1px;
+      padding: 12px 0 24px;
+      border-top: 1px solid var(--line);
+      background: rgba(4,4,4,.96);
+      backdrop-filter: blur(24px);
+    }
+    #nav-mobile-menu a {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-mid);
+      text-decoration: none;
+      padding: 12px 0;
+      transition: color .2s;
+    }
+    #nav-mobile-menu a:hover { color: var(--white); }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      #nav-mobile-btn { display: flex; }
+    }
+
+    /* ─────────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────────── */
+    #hero {
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      padding-top: 100px;
+      padding-bottom: 80px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: fadeUp .8s .1s cubic-bezier(.25,1,.5,1) forwards;
+    }
+    .eyebrow-line {
+      width: 32px; height: 1px;
+      background: var(--text-low);
+    }
+
+    .hero-headline {
+      font-size: clamp(44px, 5.5vw, 76px);
+      font-weight: 700;
+      line-height: 1.02;
+      letter-spacing: -.035em;
+      color: var(--white);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp .9s .2s cubic-bezier(.25,1,.5,1) forwards;
+    }
+    .hero-headline em {
+      font-style: normal;
+      color: #888;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--text-mid);
+      max-width: 400px;
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: fadeUp .9s .35s cubic-bezier(.25,1,.5,1) forwards;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 64px;
+      opacity: 0;
+      animation: fadeUp .9s .5s cubic-bezier(.25,1,.5,1) forwards;
+    }
+
+    .btn-fill {
+      display: inline-flex; align-items: center;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      color: var(--bg);
+      background: var(--white);
+      border: none;
+      border-radius: 100px;
+      padding: 13px 28px;
+      text-decoration: none;
+      cursor: none;
+      transition: background .2s, transform .2s, box-shadow .2s;
+    }
+    .btn-fill:hover {
+      background: #e8e8e8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255,255,255,.1);
+    }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: .04em;
+      color: var(--text-mid);
+      background: none;
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 12px 24px;
+      text-decoration: none;
+      cursor: none;
+      transition: color .2s, border-color .2s, transform .2s;
+    }
+    .btn-ghost:hover {
+      color: var(--white);
+      border-color: #444;
+      transform: translateY(-2px);
+    }
+    .btn-ghost svg { transition: transform .2s; }
+    .btn-ghost:hover svg { transform: translateX(3px); }
+
+    .hero-stats {
+      display: flex; gap: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--line-subtle);
+      opacity: 0;
+      animation: fadeUp .9s .65s cubic-bezier(.25,1,.5,1) forwards;
+    }
+    .hero-stat-num {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--white);
+      margin-bottom: 3px;
+    }
+    .hero-stat-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--text-low);
+    }
+
+    /* Moon side */
+    .hero-right {
+      position: relative;
+      height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeIn 1.4s .3s ease forwards;
+    }
+
+    .moon-wrap {
+      width: min(560px, 90vw);
+      height: min(560px, 90vw);
+      position: relative;
+    }
+
+    spline-viewer {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Hero vertical rule */
+    .hero-vline {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: var(--line-subtle);
+      pointer-events: none;
+    }
+
+    @media (max-width: 1024px) {
+      #hero { grid-template-columns: 1fr; }
+      .hero-right {
+        display: none;
+      }
+      .hero-vline { display: none; }
+      .hero-left { min-height: 100svh; justify-content: center; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ─────────────────────────────────────────────
+       SERVICES
+    ───────────────────────────────────────────── */
+    #services { padding: 120px 0; }
+
+    .services-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: end;
+      padding-bottom: 64px;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 3.5vw, 48px);
+      font-weight: 700;
+      letter-spacing: -.03em;
+      line-height: 1.05;
+      color: var(--white);
+    }
+
+    .services-list { list-style: none; }
+
+    .service-row {
+      display: grid;
+      grid-template-columns: 56px 1fr 1fr auto;
+      align-items: start;
+      gap: 24px;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--line);
+      transition: background .3s;
+      cursor: default;
+    }
+    .service-row:first-child { border-top: 1px solid var(--line); }
+
+    .service-row:hover .service-num { color: var(--white); }
+    .service-row:hover .service-name { color: var(--white); }
+
+    .service-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      color: var(--text-low);
+      padding-top: 3px;
+      transition: color .3s;
+    }
+
+    .service-name {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      color: var(--text);
+      transition: color .3s;
+    }
+
+    .service-desc {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-mid);
+      max-width: 340px;
+    }
+
+    .service-arrow {
+      margin-top: 2px;
+      opacity: 0;
+      transition: opacity .3s, transform .3s;
+      transform: translateX(-6px);
+    }
+    .service-row:hover .service-arrow {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 900px) {
+      .services-header { grid-template-columns: 1fr; }
+      .service-row { grid-template-columns: 40px 1fr; gap: 16px; }
+      .service-desc { grid-column: 2; }
+      .service-arrow { display: none; }
+    }
+
+    /* ─────────────────────────────────────────────
+       PROCESS
+    ───────────────────────────────────────────── */
+    #process { padding: 120px 0; background: var(--bg-raised); }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 64px;
+    }
+
+    .process-cell {
+      background: var(--bg-raised);
+      padding: 52px 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      transition: background .3s;
+    }
+    .process-cell:hover { background: #0f0f0f; }
+
+    .process-num-large {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .16em;
+      color: var(--text-low);
+    }
+
+    .process-phase {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      color: var(--white);
+      margin-top: -8px;
+    }
+
+    .process-desc {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--text-mid);
+    }
+
+    .process-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: auto;
+    }
+    .process-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-low);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 4px 9px;
+    }
+
+    @media (max-width: 900px) {
+      .process-grid { grid-template-columns: 1fr; }
+      .process-cell { padding: 36px 28px; }
+    }
+
+    /* ─────────────────────────────────────────────
+       WORK
+    ───────────────────────────────────────────── */
+    #work { padding: 120px 0; }
+
+    .work-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 56px;
+      gap: 24px;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 2px;
+    }
+
+    .work-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-raised);
+      cursor: none;
+    }
+    .work-card:first-child { grid-row: 1 / 3; }
+
+    .work-card-inner {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .work-card:first-child .work-card-inner { aspect-ratio: auto; height: 100%; min-height: 500px; }
+
+    .work-card-bg {
+      width: 100%; height: 100%;
+      transition: transform .6s cubic-bezier(.25,1,.5,1);
+    }
+    .work-card:hover .work-card-bg { transform: scale(1.03); }
+
+    .work-card-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 32px;
+      background: linear-gradient(to top, rgba(4,4,4,.85) 0%, transparent 100%);
+      transform: translateY(8px);
+      transition: transform .35s cubic-bezier(.25,1,.5,1);
+    }
+    .work-card:hover .work-card-info { transform: none; }
+
+    .work-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      margin-bottom: 8px;
+    }
+    .work-title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      color: var(--white);
+    }
+
+    @media (max-width: 768px) {
+      .work-grid { grid-template-columns: 1fr; }
+      .work-card:first-child { grid-row: auto; }
+      .work-card:first-child .work-card-inner { min-height: 300px; }
+    }
+
+    /* Work card visual palettes */
+    .palette-a {
+      background: linear-gradient(160deg, #0c0c0c 0%, #151515 40%, #0a0a12 100%);
+    }
+    .palette-b {
+      background: linear-gradient(160deg, #0c100a 0%, #111810 100%);
+    }
+    .palette-c {
+      background: linear-gradient(160deg, #100a0a 0%, #180f0d 100%);
+    }
+
+    /* ─────────────────────────────────────────────
+       ABOUT
+    ───────────────────────────────────────────── */
+    #about { padding: 120px 0; background: var(--bg-raised); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-pull {
+      font-size: clamp(24px, 2.8vw, 36px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.25;
+      color: var(--white);
+    }
+    .about-pull span { color: var(--text-mid); }
+
+    .about-body {
+      display: flex; flex-direction: column; gap: 20px;
+      padding-top: 6px;
+    }
+
+    .about-p {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--text-mid);
+    }
+
+    .about-values {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 20px;
+    }
+    .about-value {
+      background: var(--bg-raised);
+      padding: 24px 24px;
+      transition: background .3s;
+    }
+    .about-value:hover { background: #0f0f0f; }
+    .about-value-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--text-low);
+      margin-bottom: 10px;
+    }
+    .about-value-text {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    /* ─────────────────────────────────────────────
+       CTA
+    ───────────────────────────────────────────── */
+    #cta {
+      padding: 160px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-ghost-text {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(80px, 16vw, 220px);
+      font-weight: 800;
+      letter-spacing: -.06em;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--line);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      line-height: 1;
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .cta-headline {
+      font-size: clamp(36px, 5vw, 68px);
+      font-weight: 700;
+      letter-spacing: -.04em;
+      line-height: 1.0;
+      color: var(--white);
+      max-width: 700px;
+    }
+    .cta-headline span { color: #555; }
+
+    .cta-sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-mid);
+      max-width: 420px;
+      line-height: 1.75;
+    }
+
+    .cta-actions {
+      display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+      padding-top: 8px;
+    }
+
+    .cta-note {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-low);
+    }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────── */
+    footer {
+      padding: 48px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .footer-links {
+      display: flex; gap: 32px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-low);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--text-mid); }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      color: var(--text-xlow);
+    }
+
+    .footer-email {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      color: var(--text-low);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-email:hover { color: var(--text-mid); }
+
+    @media (max-width: 768px) {
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .footer-links { flex-wrap: wrap; gap: 20px; }
+    }
+
+    /* ─────────────────────────────────────────────
+       WORK CARD GRAPHICS
+    ───────────────────────────────────────────── */
+    .wc-graphic {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Cursor -->
+  <div id="c-dot"></div>
+  <div id="c-ring"></div>
+
+  <!-- ══════════════════════════════
+       NAVIGATION
+  ══════════════════════════════ -->
+  <nav id="nav">
+    <div class="wrap">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <div class="nav-logo-mark"></div>
+          <span class="nav-logo-text">Umbra</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#services">Services</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+
+        <a href="#cta"><button class="nav-cta">Start a project</button></a>
+
+        <button id="nav-mobile-btn" aria-label="Menu">
+          <span id="mb1"></span>
+          <span id="mb2"></span>
+          <span id="mb3"></span>
+        </button>
+      </div>
+
+      <div id="nav-mobile-menu">
+        <a href="#services" onclick="closeMobile()">Services</a>
+        <a href="#process" onclick="closeMobile()">Process</a>
+        <a href="#work" onclick="closeMobile()">Work</a>
+        <a href="#about" onclick="closeMobile()">About</a>
+        <a href="#cta" onclick="closeMobile()" style="color:var(--white);margin-top:12px;">Start a project →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════
+       HERO
+  ══════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-vline"></div>
+
+    <div class="wrap" style="display: contents;">
+      <!-- Left -->
+      <div class="hero-left wrap" style="padding-left: clamp(24px, 5vw, 80px);">
+
+        <div class="hero-eyebrow">
+          <div class="eyebrow-line"></div>
+          <span class="label">Digital Agency — Est. 2020</span>
+        </div>
+
+        <h1 class="hero-headline">
+          Web Design<br/>
+          That Inspires<br/>
+          <em>Trust &amp; Converts</em>
+        </h1>
+
+        <p class="hero-sub">
+          We craft high-performance websites that help small businesses stand out and attract more customers online. Built with precision, designed with purpose.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#cta" class="btn-fill">Start a project</a>
+          <a href="#work" class="btn-ghost">
+            View our work
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 7h9M8 4l3.5 3L8 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">50+</div>
+            <div class="hero-stat-label">Projects launched</div>
+          </div>
+          <div style="width:1px; background: var(--line); flex-shrink:0;"></div>
+          <div>
+            <div class="hero-stat-num">98%</div>
+            <div class="hero-stat-label">Client satisfaction</div>
+          </div>
+          <div style="width:1px; background: var(--line); flex-shrink:0;"></div>
+          <div>
+            <div class="hero-stat-num">3×</div>
+            <div class="hero-stat-label">Avg. conversion lift</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right — Moon -->
+      <div class="hero-right">
+        <div class="moon-wrap">
+          <spline-viewer
+            url="https://prod.spline.design/o3Lq-KsL8wG37qqD/scene.splinecode"
+            style="width:100%;height:100%;background:transparent;"
+          ></spline-viewer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ══════════════════════════════
+       SERVICES
+  ══════════════════════════════ -->
+  <section id="services">
+    <div class="wrap">
+
+      <div class="services-header sr">
+        <div>
+          <div class="label" style="margin-bottom:20px;">What we do</div>
+          <h2 class="section-title">Services built<br/>for real results.</h2>
+        </div>
+        <p class="body-text" style="max-width:360px; padding-bottom:6px;">
+          Every engagement is focused on one outcome: a website that earns its keep — driving traffic, building trust, and converting visitors into customers.
+        </p>
+      </div>
+
+      <ul class="services-list">
+        <li class="service-row sr sr-d1">
+          <span class="service-num">01</span>
+          <div class="service-name">Website Design</div>
+          <p class="service-desc">Bespoke layouts built around your audience. Every visual decision serves a purpose — from first scroll to final click.</p>
+          <div class="service-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 5l4 3-4 3" stroke="rgba(255,255,255,.4)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </li>
+        <li class="service-row sr sr-d2">
+          <span class="service-num">02</span>
+          <div class="service-name">Website Development</div>
+          <p class="service-desc">Clean, semantic code that loads fast, ranks well, and scales as your business grows. No bloat. No shortcuts.</p>
+          <div class="service-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 5l4 3-4 3" stroke="rgba(255,255,255,.4)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </li>
+        <li class="service-row sr sr-d3">
+          <span class="service-num">03</span>
+          <div class="service-name">Launch &amp; Support</div>
+          <p class="service-desc">Go live with confidence. We handle deployment, monitoring, and ongoing updates so you can focus on the business.</p>
+          <div class="service-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 5l4 3-4 3" stroke="rgba(255,255,255,.4)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ══════════════════════════════
+       PROCESS
+  ══════════════════════════════ -->
+  <section id="process">
+    <div class="wrap">
+
+      <div class="sr" style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:24px;">
+        <div>
+          <div class="label" style="margin-bottom:20px;">How we work</div>
+          <h2 class="section-title">Three steps.<br/>Zero guesswork.</h2>
+        </div>
+        <p class="body-text" style="max-width:340px; padding-bottom:6px;">
+          A clear process means no surprises. You'll always know where we are, what's next, and what to expect.
+        </p>
+      </div>
+
+      <div class="process-grid">
+
+        <div class="process-cell sr sr-d1">
+          <div class="process-num-large">01 — Discover</div>
+          <div class="process-phase">Understand first.<br/>Design second.</div>
+          <p class="process-desc">Before a single pixel is placed, we spend time understanding your business, your customers, and your goals. A strategy brief keeps every decision anchored.</p>
+          <div class="process-tags">
+            <span class="process-tag">Brand audit</span>
+            <span class="process-tag">Competitor research</span>
+            <span class="process-tag">Strategy brief</span>
+          </div>
+        </div>
+
+        <div class="process-cell sr sr-d2">
+          <div class="process-num-large">02 — Design</div>
+          <div class="process-phase">Visual thinking<br/>made concrete.</div>
+          <p class="process-desc">High-fidelity mockups, not rough sketches. You'll see exactly what you're getting before development begins — with revision rounds built in.</p>
+          <div class="process-tags">
+            <span class="process-tag">Wireframes</span>
+            <span class="process-tag">UI design</span>
+            <span class="process-tag">Interactive prototype</span>
+          </div>
+        </div>
+
+        <div class="process-cell sr sr-d3">
+          <div class="process-num-large">03 — Launch</div>
+          <div class="process-phase">Deployed, tested,<br/>and live.</div>
+          <p class="process-desc">Thorough QA, performance optimisation, and a smooth handover. Launch day should feel like a milestone — not a stress test.</p>
+          <div class="process-tags">
+            <span class="process-tag">QA testing</span>
+            <span class="process-tag">Performance</span>
+            <span class="process-tag">Handover</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ══════════════════════════════
+       WORK
+  ══════════════════════════════ -->
+  <section id="work">
+    <div class="wrap">
+
+      <div class="work-header sr">
+        <div>
+          <div class="label" style="margin-bottom:20px;">Featured work</div>
+          <h2 class="section-title">Selected projects.</h2>
+        </div>
+        <a href="#cta" class="btn-ghost">All projects
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2.5 7h9M8 4l3.5 3L8 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="work-grid sr sr-d1">
+
+        <!-- Card 1 — large -->
+        <div class="work-card">
+          <div class="work-card-inner">
+            <div class="work-card-bg palette-a" style="height:100%; min-height:500px; position:relative;">
+              <div class="wc-graphic">
+                <!-- Abstract architecture lines -->
+                <svg width="72%" viewBox="0 0 400 400" fill="none" opacity=".18">
+                  <rect x="60" y="80" width="280" height="240" stroke="white" stroke-width=".7"/>
+                  <rect x="100" y="120" width="200" height="160" stroke="white" stroke-width=".5"/>
+                  <line x1="60" y1="80" x2="100" y2="120" stroke="white" stroke-width=".5"/>
+                  <line x1="340" y1="80" x2="300" y2="120" stroke="white" stroke-width=".5"/>
+                  <line x1="60" y1="320" x2="100" y2="280" stroke="white" stroke-width=".5"/>
+                  <line x1="340" y1="320" x2="300" y2="280" stroke="white" stroke-width=".5"/>
+                  <line x1="200" y1="80" x2="200" y2="320" stroke="white" stroke-width=".4"/>
+                  <line x1="60" y1="200" x2="340" y2="200" stroke="white" stroke-width=".4"/>
+                  <circle cx="200" cy="200" r="60" stroke="white" stroke-width=".5"/>
+                  <circle cx="200" cy="200" r="4" fill="white" opacity=".6"/>
+                </svg>
+              </div>
+            </div>
+            <div class="work-card-info">
+              <div class="work-tag">Architecture · Branding · 2024</div>
+              <div class="work-title">Novalux Studio</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards 2 & 3 — stacked right -->
+        <div style="display:flex; flex-direction:column; gap:2px;">
+
+          <div class="work-card">
+            <div class="work-card-inner">
+              <div class="work-card-bg palette-b" style="height:100%;">
+                <div class="wc-graphic">
+                  <svg width="65%" viewBox="0 0 300 300" fill="none" opacity=".15">
+                    <path d="M150 40 L260 150 L150 260 L40 150 Z" stroke="white" stroke-width=".8"/>
+                    <path d="M150 80 L220 150 L150 220 L80 150 Z" stroke="white" stroke-width=".6"/>
+                    <circle cx="150" cy="150" r="40" stroke="white" stroke-width=".6"/>
+                    <circle cx="150" cy="150" r="5" fill="white" opacity=".5"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="work-card-info">
+                <div class="work-tag">Real Estate · E-commerce</div>
+                <div class="work-title">Verdana Homes</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="work-card">
+            <div class="work-card-inner">
+              <div class="work-card-bg palette-c" style="height:100%;">
+                <div class="wc-graphic">
+                  <svg width="60%" viewBox="0 0 300 300" fill="none" opacity=".14">
+                    <circle cx="150" cy="150" r="100" stroke="white" stroke-width=".8"/>
+                    <circle cx="150" cy="150" r="65" stroke="white" stroke-width=".6"/>
+                    <circle cx="150" cy="150" r="30" stroke="white" stroke-width=".5"/>
+                    <line x1="150" y1="50" x2="150" y2="250" stroke="white" stroke-width=".4"/>
+                    <line x1="50" y1="150" x2="250" y2="150" stroke="white" stroke-width=".4"/>
+                    <line x1="79" y1="79" x2="221" y2="221" stroke="white" stroke-width=".3"/>
+                    <line x1="221" y1="79" x2="79" y2="221" stroke="white" stroke-width=".3"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="work-card-info">
+                <div class="work-tag">Beauty · E-commerce</div>
+                <div class="work-title">Aurae Skincare</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ══════════════════════════════
+       ABOUT
+  ══════════════════════════════ -->
+  <section id="about">
+    <div class="wrap">
+
+      <div class="label sr" style="margin-bottom:52px;">About Umbra</div>
+
+      <div class="about-grid">
+
+        <div class="about-pull sr">
+          We work exclusively with small businesses — <span>because we believe they're the ones with the most to gain from a website that actually works.</span>
+        </div>
+
+        <div class="about-body sr sr-d2">
+          <p class="about-p">
+            Umbra Digital was founded on a simple observation: most small businesses have a website, but very few have one that genuinely performs. We exist to change that ratio.
+          </p>
+          <p class="about-p">
+            We don't use templates. Every project starts from zero — researched, designed, and built specifically for your business and the customers you're trying to reach. We obsess over the details that determine whether a visitor stays or leaves: load speed, clarity of messaging, visual trust signals, and conversion flow.
+          </p>
+
+          <div class="about-values">
+            <div class="about-value">
+              <div class="about-value-label">Principle 01</div>
+              <div class="about-value-text">Precision over decoration. Every decision has a reason.</div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-label">Principle 02</div>
+              <div class="about-value-text">Performance is the feature. Beauty follows function.</div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-label">Principle 03</div>
+              <div class="about-value-text">Transparent process. No jargon, no guesswork.</div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-label">Principle 04</div>
+              <div class="about-value-text">Long-term thinking. We build for where you're going.</div>
+            </div>
+          </div>
+
+          <div style="margin-top:8px;">
+            <a href="#cta" class="btn-fill" style="display:inline-flex;">Work with us</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ══════════════════════════════
+       CTA
+  ══════════════════════════════ -->
+  <section id="cta">
+    <div class="cta-ghost-text" aria-hidden="true">UMBRA</div>
+
+    <div class="wrap">
+      <div class="cta-inner sr">
+        <div class="label">Start a conversation</div>
+        <h2 class="cta-headline">Your website should work<br/><span>as hard as you do.</span></h2>
+        <p class="cta-sub">
+          Ready to turn your online presence into your most powerful sales asset? First consultation is always free.
+        </p>
+        <div class="cta-actions">
+          <a href="mailto:hello@umbradigital.co" class="btn-fill" style="padding: 15px 36px; font-size:14px;">Start a project</a>
+          <a href="mailto:hello@umbradigital.co" class="btn-ghost" style="padding: 14px 30px; font-size:13px;">Book a free call</a>
+        </div>
+        <div class="cta-note">No commitment · 30-min strategy call · Free audit</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+       FOOTER
+  ══════════════════════════════ -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <span class="footer-copy">© 2025 Umbra Digital</span>
+        <ul class="footer-links">
+          <li><a href="#services">Services</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="mailto:hello@umbradigital.co">Contact</a></li>
+        </ul>
+        <a href="mailto:hello@umbradigital.co" class="footer-email">hello@umbradigital.co</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════
+       SCRIPTS
+  ══════════════════════════════ -->
+  <script>
+    /* ── Custom cursor ── */
+    const dot  = document.getElementById('c-dot');
+    const ring = document.getElementById('c-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px';
+      dot.style.top  = my + 'px';
+    });
+
+    (function tick() {
+      rx += (mx - rx) * .14;
+      ry += (my - ry) * .14;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(tick);
+    })();
+
+    document.querySelectorAll('a, button, .work-card, .service-row, .process-cell, .about-value').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    /* ── Nav scroll ── */
+    const navEl = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      navEl.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+
+    /* ── Mobile menu ── */
+    const mBtn  = document.getElementById('nav-mobile-btn');
+    const mMenu = document.getElementById('nav-mobile-menu');
+    let open = false;
+
+    mBtn.addEventListener('click', () => {
+      open = !open;
+      mMenu.style.display = open ? 'flex' : 'none';
+      document.getElementById('mb1').style.transform = open ? 'rotate(45deg) translate(4px,4px)' : '';
+      document.getElementById('mb2').style.opacity   = open ? '0' : '1';
+      document.getElementById('mb3').style.transform = open ? 'rotate(-45deg) translate(4px,-4px)' : '';
+    });
+
+    function closeMobile() {
+      open = false;
+      mMenu.style.display = 'none';
+      document.getElementById('mb1').style.transform = '';
+      document.getElementById('mb2').style.opacity   = '1';
+      document.getElementById('mb3').style.transform = '';
+    }
+
+    /* ── Scroll reveal ── */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+
+    document.querySelectorAll('.sr').forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>
