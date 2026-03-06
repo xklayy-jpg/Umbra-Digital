@@ -4,23 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Umbra Digital</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; background-color:#0A0A0F; color:white; }
-    h1,h2,h3,h4,h5,h6 { font-family:'Plus Jakarta Sans', sans-serif; }
-
-    /* Fade-in sections */
-    .fade-in { opacity:0; transform: translateY(20px); transition: opacity 1s ease, transform 1s ease; }
-    .fade-in.visible { opacity:1; transform: translateY(0); }
-
-    /* Button hover glow */
-    .btn-glow:hover { box-shadow: 0 0 20px #6EE7FF; transform: translateY(-2px); }
-  </style>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="overflow-x-hidden">
+<body class="overflow-x-hidden font-inter bg-[#0A0A0F] text-white">
 
   <!-- HERO SECTION -->
   <section class="relative bg-[#0A0A0F] text-white overflow-hidden">
@@ -50,27 +44,25 @@
           camera-controls
           auto-rotate
         ></spline-viewer>
-
-        <!-- Glow behind moon -->
         <div class="absolute inset-0 bg-gradient-radial from-[#6EE7FF]/40 via-transparent to-transparent pointer-events-none"></div>
       </div>
     </div>
   </section>
 
-  <!-- SERVICES SECTION -->
+  <!-- SERVICES -->
   <section class="py-32 px-8 fade-in">
     <div class="max-w-7xl mx-auto text-center space-y-12">
       <h2 class="text-4xl font-bold">Our Services</h2>
       <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:translate-y-1 hover:shadow-xl transition">
+        <div class="service-card">
           <h3 class="text-xl font-semibold">Website Design</h3>
           <p class="text-gray-300 mt-2">Beautiful modern websites tailored to your brand.</p>
         </div>
-        <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:translate-y-1 hover:shadow-xl transition">
+        <div class="service-card">
           <h3 class="text-xl font-semibold">Website Development</h3>
           <p class="text-gray-300 mt-2">Fast, responsive, and optimized for every device.</p>
         </div>
-        <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 hover:translate-y-1 hover:shadow-xl transition">
+        <div class="service-card">
           <h3 class="text-xl font-semibold">Launch & Support</h3>
           <p class="text-gray-300 mt-2">We help your website go live and perform smoothly.</p>
         </div>
@@ -78,20 +70,20 @@
     </div>
   </section>
 
-  <!-- PROCESS SECTION -->
+  <!-- PROCESS -->
   <section class="py-32 px-8 bg-[#12121A] fade-in">
     <div class="max-w-7xl mx-auto text-center space-y-12">
       <h2 class="text-4xl font-bold">Our Process</h2>
       <div class="grid md:grid-cols-3 gap-8 text-left">
-        <div class="p-6 border border-white/10 rounded-xl">
+        <div class="process-card">
           <h3 class="text-xl font-semibold mb-2">1. Discover</h3>
           <p class="text-gray-300">We learn about your business and goals.</p>
         </div>
-        <div class="p-6 border border-white/10 rounded-xl">
+        <div class="process-card">
           <h3 class="text-xl font-semibold mb-2">2. Design</h3>
           <p class="text-gray-300">We craft a modern website tailored to your brand.</p>
         </div>
-        <div class="p-6 border border-white/10 rounded-xl">
+        <div class="process-card">
           <h3 class="text-xl font-semibold mb-2">3. Launch</h3>
           <p class="text-gray-300">Your website goes live ready to attract customers.</p>
         </div>
@@ -100,26 +92,26 @@
   </section>
 
   <!-- FEATURED WORK -->
-  <section class="py-32 px-8 fade-in">
+  <section class="py-32 px-8 fade-in" id="work">
     <div class="max-w-7xl mx-auto text-center space-y-12">
       <h2 class="text-4xl font-bold">Featured Work</h2>
       <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl overflow-hidden">
-          <img src="https://via.placeholder.com/400x250" alt="Restaurant Website" class="w-full h-48 object-cover">
+        <div class="portfolio-card">
+          <img src="https://via.placeholder.com/400x250" alt="Portfolio 1" class="w-full h-48 object-cover">
           <div class="p-4">
             <h3 class="font-semibold text-lg">Restaurant Website</h3>
             <p class="text-gray-300 text-sm">Elegant reservation landing page.</p>
           </div>
         </div>
-        <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl overflow-hidden">
-          <img src="https://via.placeholder.com/400x250" alt="Dental Clinic Website" class="w-full h-48 object-cover">
+        <div class="portfolio-card">
+          <img src="https://via.placeholder.com/400x250" alt="Portfolio 2" class="w-full h-48 object-cover">
           <div class="p-4">
             <h3 class="font-semibold text-lg">Dental Clinic Website</h3>
             <p class="text-gray-300 text-sm">Professional and approachable design.</p>
           </div>
         </div>
-        <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl overflow-hidden">
-          <img src="https://via.placeholder.com/400x250" alt="Fitness Gym Website" class="w-full h-48 object-cover">
+        <div class="portfolio-card">
+          <img src="https://via.placeholder.com/400x250" alt="Portfolio 3" class="w-full h-48 object-cover">
           <div class="p-4">
             <h3 class="font-semibold text-lg">Fitness Gym Website</h3>
             <p class="text-gray-300 text-sm">Modern design that attracts clients.</p>
@@ -129,8 +121,8 @@
     </div>
   </section>
 
-  <!-- ABOUT SECTION -->
-  <section class="py-32 px-8 bg-[#12121A] fade-in">
+  <!-- ABOUT -->
+  <section class="py-32 px-8 bg-[#12121A] fade-in" id="about">
     <div class="max-w-4xl mx-auto text-center space-y-6">
       <h2 class="text-4xl font-bold">About Umbra</h2>
       <p class="text-gray-300 text-lg">
@@ -157,7 +149,7 @@
     <p>hello@umbradigital.com &copy; 2026</p>
   </footer>
 
-  <!-- JS for fade-in on scroll -->
+  <!-- JS for fade-in -->
   <script>
     const faders = document.querySelectorAll('.fade-in');
     const appearOptions = { threshold: 0.3 };
@@ -171,6 +163,5 @@
     }, appearOptions);
     faders.forEach(fader => appearOnScroll.observe(fader));
   </script>
-
 </body>
 </html>
